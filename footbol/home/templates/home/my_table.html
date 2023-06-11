@@ -1,0 +1,78 @@
+{% extends 'home/index.html' %}
+
+{% block title %}Мои тренировки{% endblock %}
+
+
+{% block body %}
+<style>
+        .created{
+        width: 10%;
+    }
+
+.table{
+  width: 40%;
+  margin: 0 auto;
+
+}
+
+
+
+</style>
+{% if table %}
+<h1 align="center">Расписание</h1>
+{% for el in month %}
+
+<h2 align="center">На {{ el.title }}</h2>
+
+{% endfor %}
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Место</th>
+        <th scope="col">Время</th>
+        <th scope="col">Число</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in table %}
+    <tr>
+        <td>{{ item.description }}</td>
+      <td>{{  item.data }}</td>
+        <td>{{ item.date }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table><br><br>
+
+<style>
+        .table-2{
+  width: 50%;
+  margin: 0 auto;
+</style>
+<h1 align="center">Мои игры</h1>
+<table class="table-2 table">
+    <thead>
+    <tr>
+        <th scope="col">Команды</th>
+        <th scope="col">Цвет формы</th>
+        <th scope="col">Место</th>
+        <th scope="col">Дата</th>
+        <th scope="col">Время</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in matches %}
+    <tr>
+        <td>{{ item.commands }}</td>
+        <td>{{ item.color }}</td>
+        <td>{{ item.place }}</td>
+        <td>{{ item.date }}</td>
+      <td>{{  item.time }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<h1 align="center">Извини {{ user.username }}. Для тебя тренировок нет <i class="fa-solid fa-face-sad-tear"></i></h1>
+{% endif %}
+{% endblock %}

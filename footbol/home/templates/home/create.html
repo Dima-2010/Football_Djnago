@@ -1,0 +1,21 @@
+{% extends 'home/index.html' %}
+
+{% block title %}Создать{% endblock %}
+
+
+{% block body %}
+<form method="post" class="container">
+  {% csrf_token %}
+  {{ form.place }}<br>
+  {{ form.color }}<br>
+  {{ form.commands }}<br>
+  {{  form.student }}<br>
+  {{ form.date }}<br>
+  {{ form.time }}<br>
+    {{ form.command_1 }}<br>
+  {{ form.res }}<br>
+  {{ form.command_2 }}<br>
+  <button class="btn btn-success">Создать</button>
+</form>
+
+{% endblock %}

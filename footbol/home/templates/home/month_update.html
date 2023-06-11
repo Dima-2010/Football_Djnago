@@ -1,0 +1,13 @@
+{% extends 'home/index.html' %}
+
+{% block title %}Обновить{% endblock %}
+
+
+{% block body %}
+<form method="post" class="container">
+  {% csrf_token %}
+  {{ form.title }}<br>
+  <button class="btn btn-success">Обновить</button>
+</form>
+
+{% endblock %}

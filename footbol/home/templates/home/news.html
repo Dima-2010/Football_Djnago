@@ -1,0 +1,146 @@
+{% extends 'home/index.html' %}
+
+{% block title %}Новости{% endblock %}
+
+
+{% block body %}
+<style>
+
+
+
+img {
+  height: auto;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+
+
+.btn--block {
+  display: block;
+  width: 100%;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin-left: 30%;
+  width: 120%
+}
+
+.cards__item {
+  display: flex;
+  padding: 1rem;
+  @media(min-width: 40rem) {
+    width: 50%;
+  }
+  @media(min-width: 56rem) {
+    width: 33.3333%;
+  }
+}
+
+.card {
+  background-color: white;
+  border-radius: 0.25rem;
+  box-shadow: 0 20px 40px -14px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  &:hover {
+    .card__image {
+      filter: contrast(100%);
+    }
+  }
+}
+
+.card__content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+
+.card__title {
+  color: @gray-dark;
+  font-size: 1.25rem;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.card__text {
+  flex: 1 1 auto;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+}
+
+
+
+
+</style>
+<div align="center">
+{% if request.user.is_authenticated and request.user.is_staff %}
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Добавить новость
+</button>
+{% endif %}
+  </div>
+{% for el in news.all|dictsort:"date" %}
+<div class="card-2 container">
+<ul class="cards">
+  <li class="cards__item">
+    <div class="card" style="float:left;">
+      {% if el.img %}
+      <div ><img src="{{ el.img.url }}"></div>
+      {% endif %}
+      <div class="card__content">
+        <div class="card__title">{{ el.title }}</div>
+        <p class="card__text">{{ el.text }}</p>
+        <h6 class="category text-success"><i class="fa-solid fa-calendar-days"></i> {{ el.date }} {{ el.time }}</h6>
+        {% if request.user.is_authenticated and request.user.is_staff %}
+          <a href="{% url 'news_delete' el.id %}" class="btn btn-danger">Удалить</a>
+        {% endif %}
+      </div>
+
+    </div>
+  </li>
+</ul>
+  </div>
+{% endfor %}
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Добавить</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="">
+                <form id="add_form" class="container form" method="post" enctype='multipart/form-data'>
+    {% csrf_token %}
+   {{ form.errors }}
+    {{ form.title }}<br>
+    {{  form.text}}<br>
+    <div>
+        <label for="files" class="btn btn-success" style="width: 100%;">Выбрать фото</label>
+     {{ form.img }}
+   </div>
+    {{ form.date }}<br>
+    {{ form.time }}<br>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        <button form="add_form" type="submit" class="btn btn-primary">Сохранить</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

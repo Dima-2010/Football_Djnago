@@ -1,0 +1,88 @@
+{% extends 'home/index.html' %}
+
+{% block title %}Главная{% endblock %}
+
+
+{% block body %}
+
+
+
+
+<!-- Button trigger modal -->
+<div align="center">
+{% if request.user.is_authenticated and request.user.is_staff %}
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Добавить тренеровку
+</button>
+{% endif %}
+  </div><br>
+
+
+<style>
+    .created{
+        width: 10%;
+    }
+
+.table{
+  width: 40%;
+  margin: 0 auto;
+
+}
+</style>
+<h3 style="margin:0" align="center">Расписание на {{ date.date }} число. Сегодня {{ date.table_date.all.count }} тренеровок</h3><br><br>
+<table class="table">
+    <thead>
+    <tr>
+
+        <th scope="col">Года</th>
+        <th scope="col">Место</th>
+        <th scope="col">Время</th>
+        {% if request.user.is_authenticated and request.user.is_staff %}
+        <th scope="col">Редактировать</th>
+        <th scope="col">Удалить</th>
+        {% endif %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in date.table_date.all|dictsort:"data" %}
+    <tr>
+        <td>{{ item.title }}</td>
+        <td>{{ item.description }}</td>
+      <td>{{  item.data }}</td>
+        {% if request.user.is_authenticated and request.user.is_staff %}
+        <td><a href="{% url 'table_update' item.id %}">Редактировать</a></td>
+        <td><a href="{% url 'table_delete' item.id %}">Удалить</a></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Добавить</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="">
+                <form id="add_form" class="container form" method="post">
+    {% csrf_token %}
+    {{ form.title }}<br>
+    {{  form.description }}<br>
+     {{ form.data }}
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        <button form="add_form" type="submit" class="btn btn-primary">Сохранить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

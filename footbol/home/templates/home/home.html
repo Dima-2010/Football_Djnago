@@ -1,0 +1,178 @@
+{% extends 'home/index.html' %}
+
+{% block title %}Главная{% endblock %}
+
+
+{% block body %}
+<style>
+    a.text:active, /* активная/посещенная ссылка */
+a.text:hover,  /* при наведении */
+a.text {
+  text-decoration: none;
+  color: black;
+
+
+
+
+
+
+
+
+
+</style>
+<h1 align="center">Расписание</h1>
+{% for el in month %}
+
+{% if request.user.is_authenticated and request.user.is_staff %}
+<a class="text" href="{% url 'month_update' el.id %}"><h2 align="center">На {{ el.title }}</h2></a>
+
+{% else %}
+<h2 align="center">На {{ el.title }}</h2>
+{% endif %}
+{% endfor %}
+
+<style>
+
+
+.btn-light{
+    width: 4%;
+    margin: 0;
+}
+
+.table {
+margin-left: 38.5%;
+
+}
+
+.day{
+    margin-left: 0.27%;
+}
+
+
+.opacity{
+    opacity: 0.5;
+}
+
+</style>
+
+<script>
+
+</script>
+
+<div class="container table">
+    <a class="btn btn-light day">ПН</a><a class="btn btn-light day">ВТ</a><a class="btn btn-light day">СР</a><a
+        class="btn btn-light day">ЧТ</a><a class="btn btn-light day">ПТ</a><a class="btn btn-light day">СБ</a><a
+        class="btn btn-light day">ВС</a><br>
+    {% for el in date|slice:"28:31" %}
+    <a href="{% url 'details' el.id %}" class="btn btn-light opacity">{{ el.date }}</a>
+    {% endfor %}
+        {% for el in date|slice:"0:4" %}
+    <a href="{% url 'details' el.id %}" class="btn btn-light">{{ el.date }}</a>
+    {% endfor %}
+    <br>
+    {% for el in date|slice:"4:11" %}
+    <a href="{% url 'details' el.id %}" class="btn btn-light">{{ el.date }}</a>
+    {% endfor %}<br>
+    {% for el in date|slice:"11:18" %}
+    <a href="{% url 'details' el.id %}" class="btn btn-light">{{ el.date }}</a>
+    {% endfor %}<br>
+    {% for el in date|slice:"18:25" %}
+    <a href="{% url 'details' el.id %}" class="btn btn-light">{{ el.date }}</a>
+    {% endfor %}<br>
+    {% for el in date|slice:"25:30" %}
+    <a href="{% url 'details' el.id %}" class="btn btn-light">{{ el.date }}</a>
+    {% endfor %}<br>
+</div>
+
+
+<h1 align="center">Матчи</h1>
+ {% if request.user.is_authenticated and request.user.is_staff %}
+<div align="center">
+    <a class="btn btn-danger btn-lg" href="{% url 'match_create' %}">Создать матч</a>
+    <a class="btn btn-warning btn-lg" href="{% url 'match_res' %}">Добавить результаты мата</a>
+</div><br>
+{% endif %}
+<style>
+    .table-2{
+  max-width: 50%;
+  margin: 0 auto;
+
+}
+
+</style>
+
+
+<table class="table  table-2">
+    <thead>
+    <tr>
+        <th scope="col">Команды</th>
+        <th scope="col">Цвет формы</th>
+        <th scope="col">Место</th>
+        <th scope="col">Дата</th>
+        <th scope="col">Время</th>
+        {% if request.user.is_authenticated and request.user.is_staff %}
+        <th scope="col">Редактировать</th>
+        <th scope="col">Удалить</th>
+        {% endif %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in matches %}
+    <tr>
+        <td>{{ item.commands }}</td>
+        <td>{{ item.color }}</td>
+        <td>{{ item.place }}</td>
+        <td>{{ item.date }}</td>
+      <td>{{  item.time }}</td>
+        {% if request.user.is_authenticated and request.user.is_staff %}
+        <td><a href="{% url 'match_update' item.id %}">Редактировать</a></td>
+        <td><a href="{% url 'match_delete' item.id %}">Удалить</a></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<style>
+
+       .rounded{ width: 200px;
+        height: 13vh;
+        margin-top: 1em;
+        margin-left: 1em;
+    }
+    .left{
+        float: left;
+    }
+
+    .center{
+        margin-left: 25%;
+        margin-right: 25%;
+    }
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+</style>
+<h1 align="center">Результаты</h1>
+{% for el in match_res %}
+<div align="center" class="center">
+    <div class="left">
+        <a>
+<div class="rounded border container border">
+        <div align="center">
+    <p>{{ el.command_1 }}</p>
+            {% if request.user.is_authenticated and request.user.is_staff %}
+        <a class="btn btn-danger" href="{% url 'match_res_delete' el.id %}"><h2>{{ el.res }}</h2></a>
+            {% else %}
+            <h2>{{ el.res }}</h2>
+            {% endif %}
+    <p>{{ el.command_2 }}</p>
+    </div>
+</div>
+            </a>
+        </div>
+</div>
+{% endfor %}
+
+{% endblock %}
